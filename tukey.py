@@ -42,7 +42,8 @@ if way == '直接入力':
         dict = {}
         for i in range(n_category):
             # :で分けてリストにする、その1番目が数値なので、それをさらに,で分割する
-            value_split = text_split[i].split(':')[1].split(',')
+            # 条件名に:が入っている場合を考慮して、最後（右側から1番目）の:でsplitする。
+            value_split = text_split[i].rsplit(':', 1)[1].split(',')
             # stripeで余分なスペースを削除する
             value_split_nospace = [i.strip() for i in value_split]
             # 'Nan'をnp.nanに置換。'Nan'がいくつあるかわからないのでwhileですべて置換する。
@@ -52,7 +53,7 @@ if way == '直接入力':
             # 条件名が重複した場合は連番はつける
             # 連番を付加するための数字を初期化
             number = 1
-            key_ori = text_split[i].split(':')[0]
+            key_ori = text_split[i].rsplit(':', 1)[0]
             key = key_ori
             # 重複がなくなるまで連番を付加し続ける
             while key in dict.keys():
