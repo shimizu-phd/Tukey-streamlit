@@ -54,11 +54,12 @@ if way == '直接入力':
             # 条件名が重複した場合は連番はつける
             # 連番を付加するための数字を初期化
             number = 1
-            key = text_split[i].split(':')[0]
+            key_ori = text_split[i].split(':')[0]
+            key = key_ori
             # 重複がなくなるまで連番を付加し続ける
             while key in dict.keys():
                 number += 1
-                key = f"{key}{number}"
+                key = f"{key_ori}{number}"
             # 連番を付加した文字列をリストに追加
             dict[key] = None
             # np.isnanがTrueでなければintegerに変換し、それ以外はそのまま
