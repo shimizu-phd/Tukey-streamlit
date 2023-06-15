@@ -5,8 +5,6 @@ from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import matplotlib
 import japanize_matplotlib
 
-
-
 st.title('Tukey HSD 多重比較検定')
 df = None
 
@@ -21,7 +19,7 @@ if way == '直接入力':
             - データ数が違う場合はデータ数が同じになるようにNanで埋めてください.  
             - 条件と数値の個数に制限はありません.
             '''
-            )
+                )
     st.markdown('---')
     st.markdown('''
                 アンピシリン処理: 1.25, 1.37, 1.56, Nan, Nan  
@@ -60,8 +58,6 @@ if way == '直接入力':
             while key in dict.keys():
                 number += 1
                 key = f"{key_ori}{number}"
-            # 連番を付加した文字列をリストに追加
-            dict[key] = None
             # np.isnanがTrueでなければintegerに変換し、それ以外はそのまま
             dict[key] = [float(x) if not np.isnan(float(x)) else x for x in value_split_nospace]
 
@@ -73,7 +69,7 @@ if way == 'CSVから読み取り':
             - 条件と数値の数に制限はありません.  
             - 各条件に含まれるデータ数が違っていても問題ありません.
             '''
-            )
+                )
     st.markdown('---')
     st.markdown('''
                 |アンピシリン処理|ゲンタマイシン処理|バンコマイシン処理|
@@ -113,10 +109,9 @@ if df is not None:
         st.write('\n')
         st.write('結果')
         st.dataframe(summary_df)
-        #エクセルで文字化けしないようにutf-8ではなくutf-8-sigでエンコード
+        # エクセルで文字化けしないようにutf-8ではなくutf-8-sigでエンコード
         csv = summary_df.to_csv(index=False).encode('utf-8-sig')
         st.download_button('結果CSVのダウンロード', csv, 'result.csv', "text/csv")
-
 
         fig = result.plot_simultaneous()
         st.write('\n')
