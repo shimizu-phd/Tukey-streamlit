@@ -3,4 +3,5 @@ numpy
 pandas
 matplotlib
 japanize-matplotlib
+scipy
 statsmodels

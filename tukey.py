@@ -2,6 +2,7 @@ import numpy as np
 import streamlit as st
 import pandas as pd
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
+from scipy import stats
 import matplotlib
 import japanize_matplotlib
 
@@ -100,6 +101,28 @@ if df is not None:
         st.dataframe(df)
     with col2:
         st.dataframe(df_melt)
+
+    args = [df[column].dropna() for column in df.columns]
+    if len(args) == 2:
+        var1 = np.var(args[0], ddof=1)
+        var2 = np.var(args[1], ddof=1)
+        f = var1 / var2
+        right = stats.f(dfn=len(args[0])-1, dfd=len(args[1])-1).sf(f)
+        left = stats.f(dfn=len(args[0])-1, dfd=len(args[1])-1).cdf(f)
+        p_value = min(right, left) * 2
+        test_name = 'F test'
+
+    else:
+        test_statistic, p_value = stats.bartlett(*args)
+        test_name = "Bartlett's test"
+
+    if p_value < 0.05:
+        st.write(f':red[検定名: {test_name}, p値: {p_value}]')
+        st.write(f':red[等分散ではありません. 解析はできますが、Tukey HSDでの解析には適していません.]')
+    else:
+        st.write(f':blue[検定名: {test_name}, p値: {p_value}]')
+        st.write(':blue[等分散性は否定できません.このまま解析にお進みください.]')
+
     st.write('この数値で良ければ解析ボタンを押してください.')
     button = st.button('解析')
     if button:
